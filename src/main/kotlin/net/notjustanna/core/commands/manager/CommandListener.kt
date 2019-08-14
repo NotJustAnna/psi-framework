@@ -1,10 +1,9 @@
-package net.notjustanna.core.listeners
+package net.notjustanna.core.commands.manager
 
 import com.mewna.catnip.entity.message.Message
 import com.mewna.catnip.entity.util.Permission.ADMINISTRATOR
 import com.mewna.catnip.entity.util.Permission.SEND_MESSAGES
 import io.reactivex.functions.Consumer
-import net.notjustanna.core.commands.manager.CommandProcessor
 import net.notjustanna.utils.AruTaskExecutor.queue
 
 class CommandListener(private val processor: CommandProcessor) : Consumer<Message> {

@@ -1,6 +1,6 @@
 package net.notjustanna.core
 
-import net.notjustanna.core.categories.Category
+import net.notjustanna.core.commands.Category
 import net.notjustanna.core.commands.Command
 import net.notjustanna.core.commands.ICommand
 import net.notjustanna.core.commands.context.CommandContext

@@ -8,7 +8,7 @@ import mu.KLogging
 import org.kodein.di.Kodein
 import org.kodein.di.generic.instance
 import net.notjustanna.core.BotDef
-import net.notjustanna.core.listeners.CommandListener
+import net.notjustanna.core.commands.manager.CommandListener
 import net.notjustanna.utils.KodeinExtension
 
 class CatnipBootstrap(private val def: BotDef) {
@@ -16,10 +16,6 @@ class CatnipBootstrap(private val def: BotDef) {
 
     var onFirstShardReady: () -> Unit = {}
     var onAllShardsReady: (Int) -> Unit = {}
-
-    fun create(): Catnip {
-        return Catnip.catnip(def.catnipOptions)
-    }
 
     fun configure(catnip: Catnip, kodein: Kodein) {
         val instance by kodein.instance<CommandListener>()

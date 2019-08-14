@@ -12,7 +12,7 @@ import net.notjustanna.core.commands.manager.CommandRegistry
 import net.notjustanna.core.logging.DiscordLogger
 import net.notjustanna.libs.kodein.jit.installJit
 
-class KodeinBootstrap(val def: BotDef, val catnip: Catnip) {
+class KodeinBootstrap(private val def: BotDef, private val catnip: Catnip) {
     fun create() = Kodein {
         // Install JIT Module
         installJit()
