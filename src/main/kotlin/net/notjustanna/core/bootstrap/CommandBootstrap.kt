@@ -52,8 +52,8 @@ class CommandBootstrap(val scanResult: ScanResult, val kodein: Kodein) {
     }
 
     fun createCommands() {
-        scanResult.getClassesImplementing("net.notjustanna.core.ICommand")
-            .filter { it.hasAnnotation("net.notjustanna.core.Command") }
+        scanResult.getClassesImplementing("net.notjustanna.core.commands.ICommand")
+            .filter { it.hasAnnotation("net.notjustanna.core.commands.Command") }
             .loadClasses(ICommand::class.java)
             .forEach {
                 try {
@@ -68,8 +68,8 @@ class CommandBootstrap(val scanResult: ScanResult, val kodein: Kodein) {
     }
 
     fun createProviders() {
-        scanResult.getClassesImplementing("net.notjustanna.core.ICommandProvider")
-            .filter { it.hasAnnotation("net.notjustanna.core.CommandProvider") }
+        scanResult.getClassesImplementing("net.notjustanna.core.commands.ICommandProvider")
+            .filter { it.hasAnnotation("net.notjustanna.core.commands.CommandProvider") }
             .loadClasses(ICommandProvider::class.java)
             .forEach {
                 try {
@@ -83,7 +83,7 @@ class CommandBootstrap(val scanResult: ScanResult, val kodein: Kodein) {
     }
 
     fun createStandalones() {
-        scanResult.getClassesImplementing("net.notjustanna.core.Executable")
+        scanResult.getClassesImplementing("net.notjustanna.core.executor.Executable")
             .filter {
                 allOf(
                     arrayOf(
