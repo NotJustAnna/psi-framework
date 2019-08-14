@@ -73,7 +73,7 @@ bintray {
         repo = "aru"
         name = project.name
         userOrg = "notjustanna"
-        setLicenses("MIT")
+        setLicenses("Apache-2.0")
         vcsUrl = "https://github.com/notjustanna/andeclient.git"
     })
 }
