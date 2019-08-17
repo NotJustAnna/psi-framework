@@ -2,7 +2,7 @@ package net.notjustanna.core.parser
 
 import net.notjustanna.libs.resources.Resource
 
-internal fun Args.runOptions(list: List<Pair<(String) -> Boolean, Args.() -> Unit>>) {
+private fun Args.runOptions(list: List<Pair<(String) -> Boolean, Args.() -> Unit>>) {
     val map = list.toMap(LinkedHashMap())
 
     while (true) {

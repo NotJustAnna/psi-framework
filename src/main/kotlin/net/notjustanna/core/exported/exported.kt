@@ -10,4 +10,4 @@ package net.notjustanna.core.exported
 /**
  * AruCore Version
  */
-const val aruCore_version = "1.1"
+const val aruCore_version = "1.2"

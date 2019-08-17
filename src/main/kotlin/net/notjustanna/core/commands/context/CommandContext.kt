@@ -9,16 +9,14 @@ import com.mewna.catnip.entity.message.Message
 import com.mewna.catnip.entity.message.MessageOptions
 import org.slf4j.MDC
 import net.notjustanna.core.parser.Args
+import net.notjustanna.core.permissions.Permission
 import net.notjustanna.utils.extensions.lib.embed
 import net.notjustanna.utils.extensions.lib.message
-
-private typealias AruPermission = net.notjustanna.core.permissions.Permission
-private typealias CatnipPermission = com.mewna.catnip.entity.util.Permission
 
 data class CommandContext(
     val message: Message,
     val args: Args,
-    val permissions: Set<AruPermission>
+    val permissions: Set<Permission>
 ) {
     val catnip: Catnip
         get() = message.catnip()
