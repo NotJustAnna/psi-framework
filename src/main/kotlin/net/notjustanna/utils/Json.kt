@@ -1,4 +1,4 @@
-package net.notjustanna.libs.tellatale.utils
+package net.notjustanna.utils
 
 import com.grack.nanojson.JsonArray
 import com.grack.nanojson.JsonObject

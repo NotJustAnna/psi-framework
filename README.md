@@ -1,7 +1,7 @@
-# aruCore
+# psi
 Catnip-based Bot Framework in Kotlin
 
-[![Latest Version](https://api.bintray.com/packages/notjustanna/aru/aruCore/images/download.svg)](https://bintray.com/notjustanna/aru/aruCore)
+[![Latest Version](https://api.bintray.com/packages/notjustanna/aru/psi/images/download.svg)](https://bintray.com/notjustanna/aru/psi)
 
 Licensed under the [Apache 2.0 License](https://github.com/notjustanna/andeclient/blob/master/LICENSE).
 

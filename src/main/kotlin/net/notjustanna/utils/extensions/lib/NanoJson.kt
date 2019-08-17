@@ -2,7 +2,7 @@ package net.notjustanna.utils.extensions.lib
 
 import com.grack.nanojson.JsonArray
 import com.grack.nanojson.JsonObject
-import net.notjustanna.libs.tellatale.utils.Json
+import net.notjustanna.utils.Json
 
 fun jsonOf(vararg pairs: Pair<String, *>) = if (pairs.isNotEmpty()) JsonObject(mapOf(*pairs)) else JsonObject()
 
