@@ -2,8 +2,8 @@ package net.notjustanna.testbot
 
 import com.mewna.catnip.CatnipOptions
 import org.kodein.di.Kodein
-import net.notjustanna.psi.BotApplication
 import net.notjustanna.psi.BotDef
+import net.notjustanna.psi.PsiApplication
 import net.notjustanna.utils.Colors
 
 object TestBot : BotDef {
@@ -21,5 +21,5 @@ object TestBot : BotDef {
 }
 
 fun main() {
-    BotApplication(TestBot).init()
+    PsiApplication(TestBot).init()
 }

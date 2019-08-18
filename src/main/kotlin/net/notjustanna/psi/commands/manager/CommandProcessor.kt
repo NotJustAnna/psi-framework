@@ -6,21 +6,25 @@ import com.mewna.catnip.entity.util.Permission.ADMINISTRATOR
 import com.mewna.catnip.entity.util.Permission.SEND_MESSAGES
 import io.reactivex.functions.Consumer
 import mu.KLogging
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.generic.instance
 import net.notjustanna.psi.BotDef
 import net.notjustanna.psi.commands.ICommand
 import net.notjustanna.psi.commands.ICommand.CustomHandler.Result.HANDLED
 import net.notjustanna.psi.commands.context.CommandContext
+import net.notjustanna.psi.executor.service.TaskExecutorService
 import net.notjustanna.psi.parser.Args
 import net.notjustanna.psi.permissions.Permission
-import net.notjustanna.utils.PsiTaskExecutor.queue
 import net.notjustanna.utils.extensions.lang.anyOf
 import net.notjustanna.utils.extensions.lang.limit
 import java.util.*
 
 @Suppress("MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
-open class CommandProcessor(
-    protected val def: BotDef, protected val registry: CommandRegistry
-) : Consumer<Message> {
+open class CommandProcessor(override val kodein: Kodein) : Consumer<Message>, KodeinAware {
+    protected val def: BotDef by instance()
+    protected val registry: CommandRegistry by instance()
+    protected val tasks: TaskExecutorService by instance()
 
     var count: Long = 0
         private set
@@ -34,7 +38,7 @@ open class CommandProcessor(
                 !self.hasPermissions(ADMINISTRATOR)
             )) return
 
-        queue("Cmd:${message.author().discordTag()}:${message.content().limit(32)}") {
+        tasks.queue("Cmd:${message.author().discordTag()}:${message.content().limit(32)}") {
             onMessage(message)
         }
     }

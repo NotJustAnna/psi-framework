@@ -12,10 +12,9 @@ import net.notjustanna.psi.commands.manager.CommandRegistry
 import net.notjustanna.psi.executor.Executable
 import net.notjustanna.psi.executor.RunAtStartup
 import net.notjustanna.psi.executor.RunEvery
+import net.notjustanna.psi.executor.service.TaskExecutorService
 import net.notjustanna.psi.logging.DiscordLogger
 import net.notjustanna.utils.Colors
-import net.notjustanna.utils.PsiTaskExecutor.queue
-import net.notjustanna.utils.PsiTaskExecutor.task
 import net.notjustanna.utils.extensions.lang.allOf
 import net.notjustanna.utils.extensions.lang.classOf
 import net.notjustanna.utils.extensions.lib.field
@@ -24,7 +23,8 @@ import java.time.OffsetDateTime
 class CommandBootstrap(private val scanResult: ScanResult, private val kodein: Kodein) {
     companion object : KLogging()
 
-    private val registry by kodein.instance<CommandRegistry>()
+    private val tasks: TaskExecutorService by kodein.instance()
+    private val registry: CommandRegistry by kodein.instance()
     private val listener = RegistryListener()
 
     class RegistryListener : CommandRegistry.Listener {
@@ -145,10 +145,10 @@ class CommandBootstrap(private val scanResult: ScanResult, private val kodein: K
             when {
                 it.javaClass.isAnnotationPresent(classOf<RunEvery>()) -> {
                     val meta = it.javaClass.getAnnotation(classOf<RunEvery>())
-                    task(meta.amount, meta.unit, meta.initialDelay, it.simpleName + meta, it::run)
+                    tasks.task(meta.amount, meta.unit, meta.initialDelay, it.simpleName + meta, it::run)
                 }
                 it.javaClass.isAnnotationPresent(classOf<RunAtStartup>()) -> {
-                    queue("${it.simpleName}@RunAtStartup", it::run)
+                    tasks.queue("${it.simpleName}@RunAtStartup", it::run)
                 }
                 else -> {
                     logger.warn { "Error: $it is an Executable but lacks an annotation" }

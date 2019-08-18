@@ -1,20 +1,21 @@
-package net.notjustanna.utils
+package net.notjustanna.psi.executor.service
 
-import net.notjustanna.psi.executor.TaskExecutorService
 import net.notjustanna.utils.extensions.lang.threadGroupBasedFactory
 import java.lang.Thread.currentThread
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ScheduledFuture
-import java.util.concurrent.ScheduledThreadPoolExecutor
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
 import java.util.function.Supplier
 
-object PsiTaskExecutor : TaskExecutorService {
-    private val scheduler = ScheduledThreadPoolExecutor(
-        minOf(Runtime.getRuntime().availableProcessors(), 4),
-        threadGroupBasedFactory("PsiTaskExecutor")
-    )
-
+class JavaThreadTaskExecutor(private val scheduler: ScheduledExecutorService) : TaskExecutorService {
+    companion object {
+        val default by lazy {
+            JavaThreadTaskExecutor(
+                ScheduledThreadPoolExecutor(
+                    minOf(Runtime.getRuntime().availableProcessors(), 4),
+                    threadGroupBasedFactory("JavaThreadTaskExecutor.default")
+                )
+            )
+        }
+    }
     override fun task(
         period: Long,
         unit: TimeUnit,

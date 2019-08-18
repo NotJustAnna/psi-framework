@@ -1,4 +1,4 @@
-package net.notjustanna.psi.executor
+package net.notjustanna.psi.executor.service
 
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ScheduledFuture
