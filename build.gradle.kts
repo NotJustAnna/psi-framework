@@ -12,16 +12,14 @@ plugins {
 }
 
 group = "net.notjustanna.psi"
-version = "1.3"
+version = "1.3.1"
 
 //Repositories and Dependencies
 repositories {
     jcenter()
-    maven { url = uri("https://jitpack.io") }
     maven { url = uri("https://dl.bintray.com/notjustanna/maven") }
     maven { url = uri("https://dl.bintray.com/notjustanna/kotlin") }
-    mavenLocal()
-    maven { url = uri("https://dl.bintray.com/notjustanna/maven") }
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
