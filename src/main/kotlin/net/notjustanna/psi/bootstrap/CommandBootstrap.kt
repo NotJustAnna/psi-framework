@@ -4,6 +4,7 @@ import io.github.classgraph.ScanResult
 import mu.KLogging
 import org.kodein.di.Kodein
 import org.kodein.di.generic.instance
+import org.kodein.di.generic.instanceOrNull
 import net.notjustanna.libs.kodein.jit.jitInstance
 import net.notjustanna.psi.commands.Command
 import net.notjustanna.psi.commands.ICommand
@@ -52,8 +53,8 @@ class CommandBootstrap(private val scanResult: ScanResult, private val kodein: K
     }
 
     fun createCommands() {
-        scanResult.getClassesImplementing("net.notjustanna.psi.ICommand")
-            .filter { it.hasAnnotation("net.notjustanna.psi.Command") }
+        scanResult.getClassesImplementing("net.notjustanna.psi.commands.ICommand")
+            .filter { it.hasAnnotation("net.notjustanna.psi.commands.Command") }
             .loadClasses(ICommand::class.java)
             .forEach {
                 try {
@@ -68,8 +69,8 @@ class CommandBootstrap(private val scanResult: ScanResult, private val kodein: K
     }
 
     fun createProviders() {
-        scanResult.getClassesImplementing("net.notjustanna.psi.ICommandProvider")
-            .filter { it.hasAnnotation("net.notjustanna.psi.CommandProvider") }
+        scanResult.getClassesImplementing("net.notjustanna.psi.commands.ICommandProvider")
+            .filter { it.hasAnnotation("net.notjustanna.psi.commands.CommandProvider") }
             .loadClasses(ICommandProvider::class.java)
             .forEach {
                 try {
@@ -83,16 +84,16 @@ class CommandBootstrap(private val scanResult: ScanResult, private val kodein: K
     }
 
     fun createStandalones() {
-        scanResult.getClassesImplementing("net.notjustanna.psi.Executable")
+        scanResult.getClassesImplementing("net.notjustanna.psi.executor.Executable")
             .filter {
                 allOf(
                     arrayOf(
-                        "net.notjustanna.core.RunAtStartup",
-                        "net.notjustanna.core.RunEvery"
+                        "net.notjustanna.psi.executor.RunAtStartup",
+                        "net.notjustanna.psi.executor.RunEvery"
                     ).any(it::hasAnnotation),
                     arrayOf(
-                        "net.notjustanna.core.ICommand",
-                        "net.notjustanna.core.ICommandProvider"
+                        "net.notjustanna.psi.commands.ICommand",
+                        "net.notjustanna.psi.commands.ICommandProvider"
                     ).none(it::implementsInterface)
                 )
             }
@@ -108,8 +109,8 @@ class CommandBootstrap(private val scanResult: ScanResult, private val kodein: K
 
     fun reportResults() {
         if (!listener.clean) {
-            val log: DiscordLogger by kodein.instance()
-            log.embed {
+            val log: DiscordLogger? by kodein.instanceOrNull()
+            log?.embed {
                 author("Command Registry Report")
                 color(Colors.discordYellow)
 
