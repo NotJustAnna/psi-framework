@@ -10,4 +10,4 @@ package net.notjustanna.psi.exported
 /**
  * Psi Version
  */
-const val psi_version = "1.4.1"
+const val psi_version = "1.5"
