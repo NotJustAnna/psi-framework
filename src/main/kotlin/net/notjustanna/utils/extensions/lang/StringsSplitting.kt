@@ -1,11 +1,10 @@
 @file:Suppress("NOTHING_TO_INLINE")
-@file:JvmName("Extensions")
+@file:JvmName("LangExt")
 @file:JvmMultifileClass
 
 package net.notjustanna.utils.extensions.lang
 
 import java.util.*
-
 
 fun String.smartSplit(
     maxLength: Int = 2000,

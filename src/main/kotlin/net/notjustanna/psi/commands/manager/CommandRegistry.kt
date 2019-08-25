@@ -2,7 +2,6 @@ package net.notjustanna.psi.commands.manager
 
 import mu.KLogging
 import net.notjustanna.psi.commands.ICommand
-import net.notjustanna.utils.extensions.lang.classOf
 
 class CommandRegistry {
     interface Listener {
@@ -15,8 +14,8 @@ class CommandRegistry {
 
     companion object : KLogging() {
         private val helpInterfaces = listOf(
-            classOf<ICommand.HelpDialogProvider>(),
-            classOf<ICommand.HelpDialog>()
+            ICommand.HelpDialogProvider::class.java,
+            ICommand.HelpDialog::class.java
         )
 
         val NOOP_LISTENER = object : Listener {
