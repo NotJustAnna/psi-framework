@@ -8,7 +8,7 @@ import net.notjustanna.psi.commands.context.CommandContext
 import net.notjustanna.psi.permissions.Permissions
 
 interface ICommand {
-    val category: Category?
+    val category: ICategory?
 
     fun CommandContext.call()
 

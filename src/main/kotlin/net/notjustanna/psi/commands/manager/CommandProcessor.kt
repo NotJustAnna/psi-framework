@@ -10,12 +10,14 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 import net.notjustanna.psi.BotDef
+import net.notjustanna.psi.commands.ICategory
 import net.notjustanna.psi.commands.ICommand
 import net.notjustanna.psi.commands.ICommand.CustomHandler.Result.HANDLED
 import net.notjustanna.psi.commands.context.CommandContext
 import net.notjustanna.psi.executor.service.TaskExecutorService
 import net.notjustanna.psi.parser.Args
 import net.notjustanna.psi.permissions.Permission
+import net.notjustanna.psi.permissions.Permissions
 import net.notjustanna.utils.extensions.lang.anyOf
 import net.notjustanna.utils.extensions.lang.limit
 import java.util.*
@@ -108,13 +110,13 @@ open class CommandProcessor(override val kodein: Kodein) : Consumer<Message>, Ko
         } else {
             if (outer == null) {
                 if (
-                    registry.lookup.keys.mapNotNull { it as? ICommand.CustomHandler }.any {
+                    registry.commandLookup.keys.mapNotNull { it as? ICommand.CustomHandler }.any {
                         it.runCatching { ctx.customCall(cmd) }.getOrNull() == HANDLED
                     }
                 ) return
             } else {
                 if (
-                    registry.lookup.keys.mapNotNull { it as? ICommand.CustomDiscreteHandler }.any {
+                    registry.commandLookup.keys.mapNotNull { it as? ICommand.CustomDiscreteHandler }.any {
                         it.runCatching { ctx.customCall(cmd, outer) }.getOrNull() == HANDLED
                     }
                 ) return
@@ -124,8 +126,9 @@ open class CommandProcessor(override val kodein: Kodein) : Consumer<Message>, Ko
         }
     }
 
+    // overrideable behaviour
 
-    private fun onCommandError(command: ICommand, message: Message, t: Throwable) {
+    protected fun onCommandError(command: ICommand, message: Message, t: Throwable) {
         when {
             t == CommandContext.ShowHelp -> {
                 if (command is ICommand.HelpDialogProvider) {
@@ -155,24 +158,32 @@ open class CommandProcessor(override val kodein: Kodein) : Consumer<Message>, Ko
         }
     }
 
-    // extra stuff
+    protected open fun filterCommands(message: Message, command: ICommand, permissions: Set<Permission>): Boolean {
+        val perms = Permissions.AllOfMulti(
+            listOfNotNull(
+                (command.category as? ICategory.Permission)?.permissions,
+                (command as? ICommand.Permission)?.permissions
+            )
+        )
 
-    private companion object : KLogging() {
-        val dummyPermission = object : Permission {
-            override val name = "Run Bot"
-            override val description = "Override CommandProcessor#resolvePermissions to change this."
+        if (!perms.check(permissions)) {
+            notEnoughPerms(message, command, perms, permissions)
+            return false
         }
+        return true
     }
 
     // hooks
+
+    protected open fun notEnoughPerms(
+        message: Message, command: ICommand, requiredPermissions: Permissions, permissions: Set<Permission>
+    ) = Unit
 
     protected open fun customPrefixes(message: Message): List<String> = emptyList()
 
     protected open fun filterMessages(message: Message): Boolean = true
 
     protected open fun resolvePermissions(member: Member): Set<Permission> = setOf(dummyPermission)
-
-    protected open fun filterCommands(message: Message, command: ICommand, permissions: Set<Permission>) = true
 
     protected open fun beforeCommand(message: Message, cmd: String, command: ICommand, permissions: Set<Permission>) = Unit
 
@@ -184,4 +195,14 @@ open class CommandProcessor(override val kodein: Kodein) : Consumer<Message>, Ko
         underlying?.let(throwable::addSuppressed)
         logger.error(throwable) { "Error while executing $command" }
     }
+
+    // extra stuff
+
+    private companion object : KLogging() {
+        val dummyPermission = object : Permission {
+            override val name = "Run Bot"
+            override val description = "Override CommandProcessor#resolvePermissions to change this."
+        }
+    }
+
 }
