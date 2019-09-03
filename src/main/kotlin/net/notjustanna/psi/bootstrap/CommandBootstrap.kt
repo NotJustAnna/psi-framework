@@ -21,8 +21,8 @@ class CommandBootstrap(private val scanResult: ScanResult, private val kodein: K
     private val registry: CommandRegistry by kodein.instance()
 
     fun createCategories() {
-        scanResult.getClassesImplementing("net.notjustanna.psi.commands.ICategory")
-            .filter { it.hasAnnotation("net.notjustanna.psi.commands.Category") }
+        scanResult.getClassesImplementing(ICategory::class.qualifiedName)
+            .filter { it.hasAnnotation(Category::class.qualifiedName) }
             .loadClasses(ICategory::class.java)
             .forEach {
                 try {
@@ -46,8 +46,8 @@ class CommandBootstrap(private val scanResult: ScanResult, private val kodein: K
     }
 
     fun createCommands() {
-        scanResult.getClassesImplementing("net.notjustanna.psi.commands.ICommand")
-            .filter { it.hasAnnotation("net.notjustanna.psi.commands.Command") }
+        scanResult.getClassesImplementing(ICommand::class.qualifiedName)
+            .filter { it.hasAnnotation(Command::class.qualifiedName) }
             .loadClasses(ICommand::class.java)
             .forEach {
                 try {
@@ -67,8 +67,8 @@ class CommandBootstrap(private val scanResult: ScanResult, private val kodein: K
     }
 
     fun createProviders() {
-        scanResult.getClassesImplementing("net.notjustanna.psi.commands.ICommandProvider")
-            .filter { it.hasAnnotation("net.notjustanna.psi.commands.CommandProvider") }
+        scanResult.getClassesImplementing(ICommandProvider::class.qualifiedName)
+            .filter { it.hasAnnotation(CommandProvider::class.qualifiedName) }
             .loadClasses(ICommandProvider::class.java)
             .forEach {
                 try {
@@ -85,17 +85,17 @@ class CommandBootstrap(private val scanResult: ScanResult, private val kodein: K
     }
 
     fun createStandalones() {
-        scanResult.getClassesImplementing("net.notjustanna.psi.executor.Executable")
+        scanResult.getClassesImplementing(Executable::class.qualifiedName)
             .filter {
                 allOf(
                     arrayOf(
-                        "net.notjustanna.psi.executor.RunAtStartup",
-                        "net.notjustanna.psi.executor.RunEvery"
+                        RunAtStartup::class.qualifiedName,
+                        RunEvery::class.qualifiedName
                     ).any(it::hasAnnotation),
                     arrayOf(
-                        "net.notjustanna.psi.commands.ICategory",
-                        "net.notjustanna.psi.commands.ICommand",
-                        "net.notjustanna.psi.commands.ICommandProvider"
+                        ICategory::class.qualifiedName,
+                        ICommand::class.qualifiedName,
+                        ICommandProvider::class.qualifiedName
                     ).none(it::implementsInterface)
                 )
             }

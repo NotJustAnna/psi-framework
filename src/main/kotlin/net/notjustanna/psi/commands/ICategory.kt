@@ -1,8 +1,6 @@
 package net.notjustanna.psi.commands
 
-import com.mewna.catnip.entity.message.Embed
-import com.mewna.catnip.entity.message.Message
-import net.notjustanna.psi.BotDef
+import net.notjustanna.psi.commands.help.HelpProvider
 import net.notjustanna.psi.permissions.Permissions
 
 /**
@@ -14,17 +12,12 @@ interface ICategory {
      */
     val categoryName: String
 
+    val permissions: Permissions
+        get() = Permissions.none
+
     val nsfw: Boolean
+        get() = false
 
-    interface Permission : ICategory {
-        val permissions: Permissions
-    }
-
-    interface HelpDialog : ICategory {
-        fun onHelp(def: BotDef, message: Message): Embed
-    }
-
-    interface HelpDialogProvider : ICategory {
-        val helpHandler: HelpDialog
-    }
+    val help: HelpProvider?
+        get() = this as? HelpProvider
 }

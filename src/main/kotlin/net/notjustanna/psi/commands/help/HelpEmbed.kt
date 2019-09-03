@@ -1,44 +1,51 @@
 package net.notjustanna.psi.commands.help
 
-import com.mewna.catnip.entity.message.Embed
 import com.mewna.catnip.entity.message.Message
 import net.notjustanna.psi.BotDef
-import net.notjustanna.psi.commands.ICommand
+import net.notjustanna.psi.commands.help.nodes.*
 import net.notjustanna.psi.permissions.Permissions
 import net.notjustanna.utils.extensions.lib.embed
 import net.notjustanna.utils.extensions.lib.field
 import java.awt.Color
+import java.util.*
 
-class Help(
-    private val d: BaseDescription,
-    vararg val nodes: HelpNode
-) : ICommand.HelpDialog {
-    override fun onHelp(def: BotDef, message: Message): Embed = embed {
-        val names: List<String>?
-        val title: String
-        val color: Color
-        val permissions: Permissions?
-        val thumbnail: String
+class HelpEmbed(private val description: BaseDescription) : HelpProvider {
+    companion object {
+        fun command(
+            names: List<String>,
+            title: String,
+            permissions: Permissions? = null,
+            color: Color? = null,
+            thumbnail: String? = null
+        ) = HelpEmbed(CommandDescription(names, title, permissions, color, thumbnail))
 
-        when (d) {
-            is CommandDescription -> {
-                names = d.names
-                title = d.title
-                color = d.color ?: def.mainColor
-                permissions = d.permissions
-                thumbnail = d.thumbnail
-            }
-            is CategoryDescription -> {
-                names = null
-                title = d.title
-                color = d.color ?: def.mainColor
-                permissions = d.permissions
-                thumbnail = d.thumbnail
-            }
+        fun category(
+            title: String,
+            permissions: Permissions? = null,
+            color: Color? = null,
+            thumbnail: String? = null
+        ) = HelpEmbed(CategoryDescription(title, permissions, color, thumbnail))
+    }
+
+    private val nodes = LinkedList<HelpNode>()
+
+    fun addNode(node: HelpNode) = apply {
+        nodes.add(node)
+    }
+
+    override fun onHelp(def: BotDef, message: Message) = embed {
+        val names = when (description) {
+            is CommandDescription -> description.names
+            is CategoryDescription -> null
         }
+        val title = description.title
+        val color = description.color ?: def.mainColor
+        val permissions = description.permissions
+        val thumbnail = description.thumbnail
 
+        // begin embed
         color(color)
-        thumbnail(thumbnail)
+        thumbnail?.let(::thumbnail)
 
         author(title, null, message.catnip().selfUser()?.effectiveAvatarUrl())
         footer(
