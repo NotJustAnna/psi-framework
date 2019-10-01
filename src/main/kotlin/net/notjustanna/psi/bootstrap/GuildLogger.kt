@@ -8,6 +8,9 @@ import net.notjustanna.utils.Colors
 import net.notjustanna.utils.extensions.lang.multiline
 import net.notjustanna.utils.extensions.lang.plusAssign
 
+/**
+ * Webhook Logger for guild join/leaves.
+ */
 class GuildLogger(private val def: BotDef, url: String) : DiscordLogger(url) {
     fun onGuildJoin(guild: Guild) {
         embed {

@@ -9,6 +9,7 @@ import net.notjustanna.psi.commands.ICategory
 import net.notjustanna.psi.commands.ICommand
 import net.notjustanna.psi.commands.context.CommandContext
 import net.notjustanna.psi.commands.manager.CommandRegistry
+import net.notjustanna.psi.commands.manager.CommandRegistryImpl
 import net.notjustanna.utils.extensions.lang.limit
 import net.notjustanna.utils.extensions.lib.field
 
@@ -18,7 +19,7 @@ class DebugCommand(override val category: ICategory, override val kodein: Kodein
     override fun CommandContext.call() {
         val registry: CommandRegistry by instance()
 
-        with(registry) {
+        with(registry as CommandRegistryImpl) {
             sendEmbed {
                 field(
                     "commands",
@@ -29,8 +30,8 @@ class DebugCommand(override val category: ICategory, override val kodein: Kodein
                     categories.toString().limit(1024)
                 )
                 field(
-                    "commandLookup",
-                    commandLookup.toString().limit(1024)
+                    "commandNameLookup",
+                    commandNameLookup.toString().limit(1024)
                 )
                 field(
                     "categoryNameLookup",
