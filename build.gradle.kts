@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "net.notjustanna.psi"
-version = "1.8.2"
+version = "1.8.3"
 
 //Repositories and Dependencies
 repositories {
