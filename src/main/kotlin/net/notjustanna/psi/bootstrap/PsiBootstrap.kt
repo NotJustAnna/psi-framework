@@ -12,6 +12,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import org.kodein.di.KodeinAware
 import org.kodein.di.direct
 import org.kodein.di.generic.instance
+import net.notjustanna.libs.eventpipes.api.EventPipe
 import net.notjustanna.psi.BotDef
 import net.notjustanna.psi.PsiApplication
 import net.notjustanna.psi.commands.RegistryPhase
@@ -32,7 +33,7 @@ import java.lang.Runtime.getRuntime as runtime
 class PsiBootstrap(
     private val app: PsiApplication,
     private val def: BotDef,
-    private val log: BootstrapLogger
+    private val eventPipe: EventPipe<PsiApplicationEvent>
 ) : KodeinAware {
     override val kodein = PsiKodein(def)
 
@@ -97,13 +98,21 @@ class PsiBootstrap(
 
     private fun onFirstShardReady() {
         with(RegistryBootstrap(scanResult, kodein)) {
+            eventPipe.publish(BeforeRegistryPhaseEvent(app, RegistryPhase.PRE_INITIALIZATION))
             loadInjectors(RegistryPhase.PRE_INITIALIZATION)
+            eventPipe.publish(AfterRegistryPhaseEvent(app, RegistryPhase.PRE_INITIALIZATION))
             createCategories()
+            eventPipe.publish(BeforeRegistryPhaseEvent(app, RegistryPhase.AFTER_CATEGORIES))
             loadInjectors(RegistryPhase.AFTER_CATEGORIES)
+            eventPipe.publish(AfterRegistryPhaseEvent(app, RegistryPhase.AFTER_CATEGORIES))
             createCommands()
+            eventPipe.publish(BeforeRegistryPhaseEvent(app, RegistryPhase.AFTER_COMMANDS))
             loadInjectors(RegistryPhase.AFTER_COMMANDS)
+            eventPipe.publish(AfterRegistryPhaseEvent(app, RegistryPhase.AFTER_COMMANDS))
             createStandalones()
+            eventPipe.publish(BeforeRegistryPhaseEvent(app, RegistryPhase.AFTER_EXECUTABLES))
             loadInjectors(RegistryPhase.AFTER_EXECUTABLES)
+            eventPipe.publish(AfterRegistryPhaseEvent(app, RegistryPhase.AFTER_EXECUTABLES))
         }
 
         scanResult.close()
@@ -123,7 +132,7 @@ class PsiBootstrap(
         }
 
         val registry by kodein.instance<CommandRegistry>()
-        log.successful(shardCount, registry.categoryCount(), registry.commandCount())
+        eventPipe.publish(ApplicationStartedEvent(app))
     }
 
     private fun presence(vararg parts: String?) {
