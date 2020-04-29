@@ -14,7 +14,6 @@ import net.notjustanna.psi.commands.manager.CommandRegistry
 import net.notjustanna.psi.commands.manager.CommandRegistryImpl
 import net.notjustanna.psi.executor.service.JavaThreadTaskExecutor
 import net.notjustanna.psi.executor.service.TaskExecutorService
-import net.notjustanna.psi.logging.DiscordLogger
 
 /**
  * The framework's [Kodein] configurator.
@@ -33,6 +32,5 @@ class PsiKodein(def: BotDef) : Kodein by Kodein(init = {
 
     bind<TaskExecutorService>() with singleton { JavaThreadTaskExecutor.default }
     bind<ErrorHandler>() with singleton { ErrorHandler.Default }
-    def.consoleWebhook?.let { bind<DiscordLogger>() with singleton { DiscordLogger(it) } }
     def.kodeinModule?.let { import(it, true) }
 })
