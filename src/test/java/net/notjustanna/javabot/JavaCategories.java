@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 import net.notjustanna.psi.commands.Category;
 import net.notjustanna.psi.commands.ICategory;
 import net.notjustanna.psi.commands.help.HelpProvider;
-import net.notjustanna.psi.permissions.Permissions;
 
 @Category("j")
 public enum JavaCategories implements ICategory {
@@ -22,12 +21,6 @@ public enum JavaCategories implements ICategory {
     @Override
     public String getCategoryName() {
         return categoryName;
-    }
-
-    @NotNull
-    @Override
-    public Permissions getPermissions() {
-        return Permissions.Companion.getNone();
     }
 
     @Override

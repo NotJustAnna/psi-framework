@@ -1,6 +1,6 @@
 package net.notjustanna.psi
 
-import com.mewna.catnip.CatnipOptions
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
 import org.kodein.di.Kodein
 import net.notjustanna.utils.Colors
 import java.awt.Color
@@ -73,13 +73,13 @@ interface BotDef {
     val mainColor: Color get() = Colors.blurple
 
     /**
-     * Options used to create the [com.mewna.catnip.Catnip] instance.
+     * Options used to create the [net.dv8tion.jda.api.sharding.ShardManager] instance.
      *
-     * You're supposed to at least create a [CatnipOptions] interface with your bot token.
+     * You're supposed to at least create a [DefaultShardManagerBuilder] with your bot token.
      *
      * **Example**: `new CatnipOptions("YOUR_TOKEN_HERE")`
      */
-    val catnipOptions: CatnipOptions
+    val builder: DefaultShardManagerBuilder
 
     /**
      * Custom [Kodein] module used for dependency injection.

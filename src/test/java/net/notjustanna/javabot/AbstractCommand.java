@@ -6,11 +6,9 @@ import net.notjustanna.psi.commands.ICategory;
 import net.notjustanna.psi.commands.ICommand;
 import net.notjustanna.psi.commands.context.CommandContext;
 import net.notjustanna.psi.commands.help.HelpProvider;
-import net.notjustanna.psi.permissions.Permissions;
 
 public abstract class AbstractCommand implements ICommand {
     protected ICategory category;
-    protected Permissions permissions;
     protected boolean nsfw;
 
     protected AbstractCommand() {
@@ -20,12 +18,6 @@ public abstract class AbstractCommand implements ICommand {
     @Override
     public ICategory getCategory() {
         return category;
-    }
-
-    @NotNull
-    @Override
-    public Permissions getPermissions() {
-        return permissions;
     }
 
     @Override

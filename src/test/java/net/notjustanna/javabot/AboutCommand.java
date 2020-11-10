@@ -1,6 +1,6 @@
 package net.notjustanna.javabot;
 
-import com.mewna.catnip.entity.builder.EmbedBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.jetbrains.annotations.NotNull;
 import net.notjustanna.psi.commands.Category;
 import net.notjustanna.psi.commands.Command;
@@ -20,8 +20,8 @@ class AboutCommand extends AbstractCommand {
     public void call(@NotNull CommandContext ctx) {
         ctx.getChannel().sendMessage(
             new EmbedBuilder()
-                .description("This is an example Kotlin bot made using psi " + psi_version + ".\nThanks for using it <3.")
+                .appendDescription("This is an example Java bot made using psi " + psi_version + ".\nThanks for using it <3.")
                 .build()
-        );
+        ).submit();
     }
 }

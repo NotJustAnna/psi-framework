@@ -1,17 +1,13 @@
 package net.notjustanna.psi.commands
 
-import com.mewna.catnip.entity.message.Message
+import net.dv8tion.jda.api.entities.Message
 import net.notjustanna.psi.commands.ICommand.CustomHandler.Result
 import net.notjustanna.psi.commands.context.CommandContext
 import net.notjustanna.psi.commands.help.HelpProvider
-import net.notjustanna.psi.permissions.Permissions
 
 interface ICommand {
     val category: ICategory?
         get() = null
-
-    val permissions: Permissions
-        get() = Permissions.none
 
     val nsfw: Boolean
         get() = category?.nsfw ?: false

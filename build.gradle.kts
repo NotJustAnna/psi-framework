@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "net.notjustanna.psi"
-version = "2.0"
+version = "3.0"
 
 //Repositories and Dependencies
 repositories {
@@ -24,16 +24,19 @@ repositories {
 
 dependencies {
     compile(kotlin("stdlib-jdk8"))
-
-    compile("com.mewna:catnip:2.0.0")
-    compile("io.reactivex.rxjava3:rxkotlin:3.0.0")
+    compile("net.dv8tion:JDA:4.2.0_214") {
+        exclude(module = "opus-java")
+    }
+    implementation("club.minnced:jda-reactor:1.2.0")
+    compile("io.projectreactor.kotlin:reactor-kotlin-extensions:1.1.0")
+    compile ("com.jagrosh:jda-utilities-commons:3.0.5")
     compile("io.github.classgraph:classgraph:4.8.47")
     compile("org.kodein.di:kodein-di-generic-jvm:6.5.5")
     compile("net.notjustanna.libs:kodein-jit-bindings:2.2")
 
     // Open-Source Libraries
-    compile("net.notjustanna.libs:catnip-entityfinder:1.0")
     compile("net.notjustanna.libs:resources:1.0")
+    compile ("com.grack:nanojson:1.6")
 
     // Logging
     compile("ch.qos.logback:logback-classic:1.2.3")
